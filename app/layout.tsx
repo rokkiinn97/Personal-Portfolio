@@ -5,7 +5,7 @@ import SiteEffects from '../components/SiteEffects';
 export const metadata: Metadata = {
   title: 'Tejas Kamble — SEO Analyst & Search Growth Strategist',
   description: 'Tejas Kamble is an SEO Analyst and Search Growth Strategist working across technical SEO, international SEO, local search, information architecture, content and digital growth.',
-  metadataBase: new URL('https://tejasportfolio.com'),
+  metadataBase: new URL('https://tj-portfolio-nine.vercel.app'),
   alternates: { canonical: '/' },
   openGraph: { title: 'Tejas Kamble — SEO Analyst & Search Growth Strategist', description: 'Search, websites, content, data and business.', type: 'website' },
   robots: { index: true, follow: true },

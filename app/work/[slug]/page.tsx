@@ -1,8 +1,10 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 import BrandLogo from '../../../components/BrandLogo';
 import { projects } from '../../../data/site';
+import { caseStudyProjects } from '../../../data/case-study-routes';
 
 const caseStudies: Record<string, any> = {
   eduguide: {
@@ -104,7 +106,17 @@ const caseStudies: Record<string, any> = {
   }
 };
 
-export function generateStaticParams() { return projects.map((p) => ({ slug: p.slug })); }
+export const dynamicParams = false;
+
+export function generateStaticParams() { return caseStudyProjects.map((project) => ({ slug: project.slug })); }
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const project = projects.find((item) => item.slug === slug);
+  if (!project || !caseStudies[slug]) return { robots: { index: false, follow: false } };
+
+  return { alternates: { canonical: `/work/${slug}` } };
+}
 
 function SystemNode({ num, label, text, last }: { num: string; label: string; text: string; last?: boolean }) {
   return <div className="case3-node">

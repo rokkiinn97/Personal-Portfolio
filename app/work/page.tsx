@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { projects } from '../../data/site';
+import { caseStudySlugs } from '../../data/case-study-routes';
 import BrandLogo from '../../components/BrandLogo';
 
 const filters = ['ALL', 'TECHNICAL', 'INTERNATIONAL', 'LOCAL', 'CONTENT', 'AEO / GEO'];
@@ -89,8 +90,10 @@ export default function WorkPage() {
         </div>
 
         <div className="work-page-projects">
-          {visibleProjects.map((project, index) => (
-            <Link href={`/work/${project.slug}`} className={`work-project ${index === 0 ? 'is-featured' : ''}`} key={project.slug} aria-label={`View ${project.title} case study`}>
+          {visibleProjects.map((project, index) => {
+            const hasCaseStudy = caseStudySlugs.includes(project.slug as (typeof caseStudySlugs)[number]);
+            const cardContent = (
+              <>
               <div className="work-project-visual">
                 <div className="work-project-image" style={{ backgroundImage: `linear-gradient(0deg, rgba(8,10,14,.72), rgba(8,10,14,.02) 68%), url(${project.image})` }} />
                 <div className="work-project-top"><span>{project.number} / 06</span><ProjectGlyph slug={project.slug} /></div>
@@ -103,10 +106,21 @@ export default function WorkPage() {
                 <div className="work-project-signals">
                   {(projectSignals[project.slug] || project.tags.slice(0, 3)).map((signal, i) => <span key={signal}><i>0{i + 1}</i>{signal}</span>)}
                 </div>
-                <div className="work-project-footer"><span>CASE STUDY / BUILDING WITH VERIFIED PROJECT EVIDENCE</span><b>↗</b></div>
+                <div className="work-project-footer"><span>{hasCaseStudy ? 'CASE STUDY / BUILDING WITH VERIFIED PROJECT EVIDENCE' : 'PROJECT OVERVIEW / CASE STUDY NOT PUBLISHED'}</span><b>↗</b></div>
               </div>
-            </Link>
-          ))}
+              </>
+            );
+
+            return hasCaseStudy ? (
+              <Link href={`/work/${project.slug}`} className={`work-project ${index === 0 ? 'is-featured' : ''}`} key={project.slug} aria-label={`View ${project.title} case study`}>
+                {cardContent}
+              </Link>
+            ) : (
+              <article className={`work-project ${index === 0 ? 'is-featured' : ''}`} key={project.slug}>
+                {cardContent}
+              </article>
+            );
+          })}
         </div>
 
         {visibleProjects.length === 0 && <div className="work-page-empty">No project in the current set uses that signal.</div>}
